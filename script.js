@@ -134,9 +134,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        stopTimer(); // Kill timer immediately on any move
         gameState.board[index] = gameState.currentTurn;
         cell.textContent = gameState.currentTurn;
-        startTimer(); // Reset timer for the next player
 
         const winningCombination = checkWin(gameState.board, gameState.currentTurn);
         if (winningCombination) {
@@ -158,8 +158,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (gameState.isActive && gameConfig.mode === 'pvc' && gameState.currentTurn !== gameConfig.playerSymbol) {
-            stopTimer(); // Stop player's timer before computer moves
-            setTimeout(handleComputerMove, 500);
+            setTimeout(handleComputerMove, 500); // Timer already stopped above, just schedule computer
+        } else if (gameState.isActive) {
+            startTimer(); // Only start timer for a human player's turn
         }
     };
 
