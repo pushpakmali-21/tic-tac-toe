@@ -14,7 +14,7 @@
     --tertiary-bg: rgba(255, 0, 128, 0.1);
     --tertiary-hover-bg: rgba(255, 0, 128, 0.2);
     --font-family-main: 'Orbitron', monospace;
-    
+
     /* Responsive Sizing */
     --board-size: 45vmin;
     --cell-size: calc(var(--board-size) / 3);
@@ -30,7 +30,7 @@ body {
     font-family: var(--font-family-main);
     background-color: var(--bg-color);
     color: var(--text-color);
-    background-image: 
+    background-image:
         radial-gradient(circle at 20% 80%, rgba(0, 255, 65, 0.1) 0%, transparent 50%),
         radial-gradient(circle at 80% 20%, rgba(255, 0, 128, 0.1) 0%, transparent 50%),
         linear-gradient(45deg, transparent 30%, rgba(0, 255, 65, 0.05) 50%, transparent 70%);
@@ -39,8 +39,15 @@ body {
 }
 
 @keyframes backgroundShift {
-    0%, 100% { background-position: 0% 0%, 0% 0%, 0px 0px; }
-    50% { background-position: 100% 100%, 100% 100%, 100px 100px; }
+
+    0%,
+    100% {
+        background-position: 0% 0%, 0% 0%, 0px 0px;
+    }
+
+    50% {
+        background-position: 100% 100%, 100% 100%, 100px 100px;
+    }
 }
 
 .hidden {
@@ -57,6 +64,11 @@ body {
     border: 2px solid var(--primary-color);
     box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
     backdrop-filter: blur(10px);
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
 }
 
 .timer-label {
@@ -156,12 +168,12 @@ h2 {
     transform: translateY(-2px);
 }
 
-.primary-btn { 
+.primary-btn {
     border-color: var(--primary-color);
     color: var(--primary-color);
 }
 
-.secondary-btn { 
+.secondary-btn {
     border-color: var(--secondary-color);
     color: var(--secondary-color);
 }
@@ -182,7 +194,7 @@ h2 {
     border-color: var(--secondary-color);
 }
 
-.tertiary-btn:hover { 
+.tertiary-btn:hover {
     background-color: var(--secondary-color);
     color: var(--bg-color);
 }
@@ -241,14 +253,14 @@ h2 {
     text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
 }
 
-.cell:hover { 
+.cell:hover {
     background-color: var(--cell-hover-bg);
     border-color: var(--primary-color);
     box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
     transform: scale(1.05);
 }
 
-.cell.winning-cell { 
+.cell.winning-cell {
     background-color: var(--accent-color);
     color: var(--bg-color);
     text-shadow: none;
@@ -257,14 +269,22 @@ h2 {
 }
 
 @keyframes pulse {
-    from { transform: scale(1); }
-    to { transform: scale(1.1); }
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.1);
+    }
 }
 
 #status-message-container {
-    min-height: 60px;
+    min-height: 80px;
     text-align: center;
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 #status-message {
@@ -297,12 +317,12 @@ h2 {
     h1 {
         font-size: 2.5rem;
     }
-    
+
     .btn {
         min-width: 180px;
         font-size: 1rem;
     }
-    
+
     .content-box {
         padding: 30px 20px;
     }
