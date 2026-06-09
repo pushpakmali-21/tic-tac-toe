@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chooseXBtn = document.getElementById('choose-x');
     const chooseOBtn = document.getElementById('choose-o');
     const timerDisplay = document.getElementById('timer-display');
-    
+
     // --- Containers and Back Buttons ---
     const backFromDifficultyBtn = document.getElementById('back-from-difficulty');
     const backFromChoiceBtn = document.getElementById('back-from-choice');
@@ -23,16 +23,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameContainer = document.getElementById('game-container');
 
     // --- Game State Variables ---
-    let currentPlayer = 'X';
-    let playerSymbol = 'X';
-    let computerSymbol = 'O';
-    let gameBoard = ['', '', '', '', '', '', '', '', ''];
-    let isGameActive = true;
-    let isPlayerVsComputer = false;
-    let difficultyLevel = 'easy';
-    let timerInterval;
-    const TURN_DURATION = 10; // 10 seconds per turn
+    const gameConfig = {
+        mode: 'pvp',           // 'pvp' or 'pvc'
+        difficulty: 'easy',    // 'easy' or 'hard'
+        playerSymbol: 'X',
+        computerSymbol: 'O',
+        turnDuration: 10
+    };
 
+    const gameState = {
+        board: ['', '', '', '', '', '', '', '', ''],
+        isActive: true,
+        currentTurn: 'X',
+        scores: { player1: 0, player2: 0, ties: 0 },
+        timerInterval: null
+    };
     const winningConditions = [
         [0, 1, 2], [3, 4, 5], [6, 7, 8],
         [0, 3, 6], [1, 4, 7], [2, 5, 8],
@@ -55,24 +60,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Feature: Timed Turns ---
     const stopTimer = () => {
-        if (timerInterval) {
-            clearInterval(timerInterval);
-            timerInterval = null;
+        if (gameState.timerInterval) {
+            clearInterval(gameState.timerInterval);
+            gameState.timerInterval = null;
         }
         timerDisplay.textContent = '';
     };
 
     const startTimer = () => {
         stopTimer();
-        let timeLeft = TURN_DURATION;
+        let timeLeft = gameConfig.turnDuration;
         timerDisplay.textContent = `Time left: ${timeLeft}`;
 
-        timerInterval = setInterval(() => {
+        gameState.timerInterval = setInterval(() => {
             timeLeft--;
             timerDisplay.textContent = `Time left: ${timeLeft}`;
             if (timeLeft <= 0) {
                 stopTimer();
-                const loser = currentPlayer;
+                const loser = gameState.currentTurn;
                 const winner = loser === 'X' ? 'O' : 'X';
                 statusMessage.textContent = messages.timeout(loser);
                 endGame(winner);
@@ -82,9 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Core Game Logic ---
     const resetState = () => {
-        gameBoard = ['', '', '', '', '', '', '', '', ''];
-        isGameActive = true;
-        currentPlayer = 'X';
+        gameState.board = ['', '', '', '', '', '', '', '', ''];
+        gameState.isActive = true;
+        gameState.currentTurn = 'X';
         cells.forEach(cell => {
             cell.textContent = '';
             cell.classList.remove('winning-cell');
@@ -101,11 +106,11 @@ document.addEventListener('DOMContentLoaded', () => {
         playerChoiceContainer.classList.add('hidden');
         gameContainer.classList.remove('hidden');
         resetState();
-        
-        if (isPlayerVsComputer) {
-            statusMessage.textContent = (playerSymbol === 'X') ? messages.yourTurn : messages.computerTurn;
-            if (playerSymbol === 'O') {
-                currentPlayer = 'X'; // Computer starts
+
+        if (gameConfig.mode === 'pvc') {
+            statusMessage.textContent = (gameConfig.playerSymbol === 'X') ? messages.yourTurn : messages.computerTurn;
+            if (gameConfig.playerSymbol === 'O') {
+                gameState.currentTurn = 'X'; // Computer starts
                 setTimeout(handleComputerMove, 500);
             } else {
                 startTimer(); // Player starts
@@ -122,37 +127,37 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Invalid cell index or element provided');
             return;
         }
-        
+
         // Input validation for current player
-        if (!['X', 'O'].includes(currentPlayer)) {
-            console.error('Invalid current player:', currentPlayer);
+        if (!['X', 'O'].includes(gameState.currentTurn)) {
+            console.error('Invalid current player:', gameState.currentTurn);
             return;
         }
 
-        gameBoard[index] = currentPlayer;
-        cell.textContent = currentPlayer;
+        gameState.board[index] = gameState.currentTurn;
+        cell.textContent = gameState.currentTurn;
         startTimer(); // Reset timer for the next player
-        
-        const winningCombination = checkWin(gameBoard, currentPlayer);
+
+        const winningCombination = checkWin(gameState.board, gameState.currentTurn);
         if (winningCombination) {
-            endGame(currentPlayer, winningCombination);
+            endGame(gameState.currentTurn, winningCombination);
             return;
         }
 
-        if (!gameBoard.includes('')) {
+        if (!gameState.board.includes('')) {
             endGame(null); // Draw
             return;
         }
-        
-        currentPlayer = (currentPlayer === 'X') ? 'O' : 'X';
-        
-        if (isPlayerVsComputer) {
-            statusMessage.textContent = (currentPlayer === playerSymbol) ? messages.yourTurn : messages.computerTurn;
+
+        gameState.currentTurn = (gameState.currentTurn === 'X') ? 'O' : 'X';
+
+        if (gameConfig.mode === 'pvc') {
+            statusMessage.textContent = (gameState.currentTurn === gameConfig.playerSymbol) ? messages.yourTurn : messages.computerTurn;
         } else {
-            statusMessage.textContent = messages.playerTurn(currentPlayer);
+            statusMessage.textContent = messages.playerTurn(gameState.currentTurn);
         }
-        
-        if (isGameActive && isPlayerVsComputer && currentPlayer !== playerSymbol) {
+
+        if (gameState.isActive && gameConfig.mode === 'pvc' && gameState.currentTurn !== gameConfig.playerSymbol) {
             stopTimer(); // Stop player's timer before computer moves
             setTimeout(handleComputerMove, 500);
         }
@@ -168,8 +173,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (gameBoard[clickedCellIndex] !== '' || !isGameActive) return;
-        if (isPlayerVsComputer && currentPlayer !== playerSymbol) return;
+        if (gameState.board[clickedCellIndex] !== '' || !gameState.isActive) return;
+        if (gameConfig.mode === 'pvc' && gameState.currentTurn !== gameConfig.playerSymbol) return;
 
         handlePlayerMove(clickedCell, clickedCellIndex);
     };
@@ -190,24 +195,24 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const endGame = (winner, winningCombination = null) => {
-        if (!isGameActive) return;
-        isGameActive = false;
+        if (!gameState.isActive) return;
+        gameState.isActive = false;
         stopTimer();
 
         if (winner) {
-            if (isPlayerVsComputer) {
-                statusMessage.textContent = (winner === playerSymbol) ? messages.youWin : messages.youLose;
-                subMessage.textContent = (winner === playerSymbol) ? messages.winQuote : messages.loseQuote;
+            if (gameConfig.mode === 'pvc') {
+                statusMessage.textContent = (winner === gameConfig.playerSymbol) ? messages.youWin : messages.youLose;
+                subMessage.textContent = (winner === gameConfig.playerSymbol) ? messages.winQuote : messages.loseQuote;
             } else {
                 statusMessage.textContent = messages.win(winner);
                 subMessage.textContent = messages.winQuote;
             }
-            if(winningCombination) highlightWinningCells(winningCombination);
+            if (winningCombination) highlightWinningCells(winningCombination);
         } else {
             statusMessage.textContent = messages.draw;
             subMessage.textContent = messages.drawQuote;
         }
-        
+
         rematchButton.classList.remove('hidden');
     };
 
@@ -216,30 +221,30 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Invalid winning combination provided');
             return;
         }
-        
+
         winningCombination.forEach(index => {
             if (index >= 0 && index < 9 && cells[index]) {
                 cells[index].classList.add('winning-cell');
             }
         });
     };
-    
+
     // --- Computer AI Logic ---
     const handleComputerMove = () => {
-        if (!isGameActive || currentPlayer === playerSymbol) return;
+        if (!gameState.isActive || gameState.currentTurn === gameConfig.playerSymbol) return;
         let moveIndex;
-        if (difficultyLevel === 'easy') {
+        if (gameConfig.difficulty === 'easy') {
             moveIndex = getEasyMove();
         } else {
-            moveIndex = minimax(gameBoard, computerSymbol).index;
+            moveIndex = minimax(gameState.board, gameConfig.computerSymbol).index;
         }
         if (moveIndex !== undefined) {
-             handlePlayerMove(cells[moveIndex], moveIndex);
+            handlePlayerMove(cells[moveIndex], moveIndex);
         }
     };
 
     const getEasyMove = () => {
-        const availableCells = gameBoard
+        const availableCells = gameState.board
             .map((cell, index) => cell === '' ? index : null)
             .filter(index => index !== null);
         if (availableCells.length > 0) {
@@ -247,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return undefined;
     };
-    
+
     const minimax = (newBoard, player) => {
         // Input validation for minimax
         if (!Array.isArray(newBoard) || newBoard.length !== 9 || !['X', 'O'].includes(player)) {
@@ -257,8 +262,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const availSpots = newBoard.map((val, i) => (val === '') ? i : null).filter(v => v !== null);
 
-        if (checkWin(newBoard, playerSymbol)) return { score: -10 };
-        if (checkWin(newBoard, computerSymbol)) return { score: 10 };
+        if (checkWin(newBoard, gameConfig.playerSymbol)) return { score: -10 };
+        if (checkWin(newBoard, gameConfig.computerSymbol)) return { score: 10 };
         if (availSpots.length === 0) return { score: 0 };
 
         const moves = [];
@@ -267,11 +272,11 @@ document.addEventListener('DOMContentLoaded', () => {
             move.index = availSpots[i];
             newBoard[availSpots[i]] = player;
 
-            if (player === computerSymbol) {
-                const result = minimax(newBoard, playerSymbol);
+            if (player === gameConfig.computerSymbol) {
+                const result = minimax(newBoard, gameConfig.playerSymbol);
                 move.score = result.score;
             } else {
-                const result = minimax(newBoard, computerSymbol);
+                const result = minimax(newBoard, gameConfig.computerSymbol);
                 move.score = result.score;
             }
 
@@ -280,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         let bestMove;
-        if (player === computerSymbol) {
+        if (player === gameConfig.computerSymbol) {
             let bestScore = -Infinity;
             for (let i = 0; i < moves.length; i++) {
                 if (moves[i].score > bestScore) {
@@ -322,15 +327,14 @@ document.addEventListener('DOMContentLoaded', () => {
     cells.forEach(cell => cell.addEventListener('click', handleCellClick));
     restartButton.addEventListener('click', startGame);
     rematchButton.addEventListener('click', startGame);
-    
-    playerVsPlayerBtn.addEventListener('click', () => { isPlayerVsComputer = false; gameModeSelection.classList.add('hidden'); showPlayerChoice(); });
-    playerVsComputerBtn.addEventListener('click', () => { isPlayerVsComputer = true; gameModeSelection.classList.add('hidden'); showDifficultySelection(); });
-    difficultyEasyBtn.addEventListener('click', () => { difficultyLevel = 'easy'; showPlayerChoice(); });
-    difficultyHardBtn.addEventListener('click', () => { difficultyLevel = 'hard'; showPlayerChoice(); });
-    chooseXBtn.addEventListener('click', () => { playerSymbol = 'X'; computerSymbol = 'O'; startGame(); });
-    chooseOBtn.addEventListener('click', () => { playerSymbol = 'O'; computerSymbol = 'X'; startGame(); });
-    
+
+    playerVsPlayerBtn.addEventListener('click', () => { gameConfig.mode = 'pvp'; gameModeSelection.classList.add('hidden'); showPlayerChoice(); });
+    playerVsComputerBtn.addEventListener('click', () => { gameConfig.mode = 'pvc'; gameModeSelection.classList.add('hidden'); showPlayerChoice(); });
+    difficultyEasyBtn.addEventListener('click', () => { gameConfig.difficulty = 'easy'; showPlayerChoice(); });
+    difficultyHardBtn.addEventListener('click', () => { gameConfig.difficulty = 'hard'; showPlayerChoice(); });
+    chooseXBtn.addEventListener('click', () => { gameConfig.playerSymbol = 'X'; gameConfig.computerSymbol = 'O'; startGame(); });
+    chooseOBtn.addEventListener('click', () => { gameConfig.playerSymbol = 'O'; gameConfig.computerSymbol = 'X'; startGame(); });
     backFromDifficultyBtn.addEventListener('click', showGameMode);
-    backFromChoiceBtn.addEventListener('click', () => isPlayerVsComputer ? showDifficultySelection() : showGameMode());
+    backFromChoiceBtn.addEventListener('click', () => gameConfig.mode === 'pvc' ? showDifficultySelection() : showGameMode());
     backFromGameBtn.addEventListener('click', showGameMode);
 });
