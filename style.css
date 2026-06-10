@@ -253,6 +253,11 @@ h2 {
     text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
 }
 
+.cell:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
 .cell:hover {
     background-color: var(--cell-hover-bg);
     border-color: var(--primary-color);

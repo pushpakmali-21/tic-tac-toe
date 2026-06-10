@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,15 +10,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div class="container">
         <h1>Tic-Tac-Toe</h1>
-        
+
         <div id="game-mode-selection" class="content-box">
             <button id="player-vs-player" class="btn primary-btn">Player vs Player</button>
             <button id="player-vs-computer" class="btn primary-btn">Player vs Computer</button>
         </div>
-        
+
         <div id="difficulty-selection" class="hidden content-box">
             <h2>Select Difficulty:</h2>
             <button id="difficulty-easy" class="btn secondary-btn">Easy</button>
@@ -33,9 +35,10 @@
             </div>
             <button id="back-from-choice" class="btn tertiary-btn">Back</button>
         </div>
-        
+
         <div id="game-container" class="hidden">
-            <div id="status-message-container">
+
+            <div id="status-message-container" aria-live="polite">
                 <div id="status-message"></div>
                 <div id="sub-message"></div>
             </div>
@@ -45,18 +48,18 @@
                 <div id="timer-display">Time left: 10</div>
             </div>
 
-            <div id="board">
-                <div class="cell" data-cell-index="0"></div>
-                <div class="cell" data-cell-index="1"></div>
-                <div class="cell" data-cell-index="2"></div>
-                <div class="cell" data-cell-index="3"></div>
-                <div class="cell" data-cell-index="4"></div>
-                <div class="cell" data-cell-index="5"></div>
-                <div class="cell" data-cell-index="6"></div>
-                <div class="cell" data-cell-index="7"></div>
-                <div class="cell" data-cell-index="8"></div>
+            <div id="board" role="grid" aria-label="Tic-Tac-Toe Board">
+                <button class="cell" data-cell-index="0" aria-label="Cell 1, Empty"></button>
+                <button class="cell" data-cell-index="1" aria-label="Cell 2, Empty"></button>
+                <button class="cell" data-cell-index="2" aria-label="Cell 3, Empty"></button>
+                <button class="cell" data-cell-index="3" aria-label="Cell 4, Empty"></button>
+                <button class="cell" data-cell-index="4" aria-label="Cell 5, Empty"></button>
+                <button class="cell" data-cell-index="5" aria-label="Cell 6, Empty"></button>
+                <button class="cell" data-cell-index="6" aria-label="Cell 7, Empty"></button>
+                <button class="cell" data-cell-index="7" aria-label="Cell 8, Empty"></button>
+                <button class="cell" data-cell-index="8" aria-label="Cell 9, Empty"></button>
             </div>
-            
+
             <div id="game-over-buttons">
                 <button id="rematch-button" class="btn secondary-btn hidden">Rematch</button>
                 <button id="restart-button" class="btn primary-btn">Restart Game</button>
@@ -66,4 +69,5 @@
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>
