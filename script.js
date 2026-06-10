@@ -306,6 +306,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return moves[bestMove];
     };
 
+    const handleGridNavigation = (e, index) => {
+        let targetIndex = null;
+        if (e.key === 'ArrowRight') targetIndex = index + 1;
+        if (e.key === 'ArrowLeft') targetIndex = index - 1;
+        if (e.key === 'ArrowDown') targetIndex = index + 3;
+        if (e.key === 'ArrowUp') targetIndex = index - 3;
+        if (targetIndex !== null && targetIndex >= 0 && targetIndex < 9) {
+            e.preventDefault(); // Stop page from scrolling on arrow keys
+            cells[targetIndex].focus();
+        }
+    };
+
+
     // --- Navigation & Event Listeners ---
     const showGameMode = () => {
         gameContainer.classList.add('hidden');
@@ -326,6 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+    cells.forEach((cell, idx) => cell.addEventListener('keydown', (e) => handleGridNavigation(e, idx)));
     restartButton.addEventListener('click', startGame);
     rematchButton.addEventListener('click', startGame);
 
