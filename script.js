@@ -106,6 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
         playerChoiceContainer.classList.add('hidden');
         gameContainer.classList.remove('hidden');
         resetState();
+        document.getElementById('score-label-p1').textContent = gameConfig.mode === 'pvc' ? `YOU (${gameConfig.playerSymbol})` : 'PLAYER 1';
+        document.getElementById('score-label-p2').textContent = gameConfig.mode === 'pvc' ? `CPU (${gameConfig.computerSymbol})` : 'PLAYER 2';
+        updateScoreboardDOM();
 
         if (gameConfig.mode === 'pvc') {
             statusMessage.textContent = (gameConfig.playerSymbol === 'X') ? messages.yourTurn : messages.computerTurn;
@@ -204,16 +207,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (gameConfig.mode === 'pvc') {
                 statusMessage.textContent = (winner === gameConfig.playerSymbol) ? messages.youWin : messages.youLose;
                 subMessage.textContent = (winner === gameConfig.playerSymbol) ? messages.winQuote : messages.loseQuote;
+                if (winner === gameConfig.playerSymbol) gameState.scores.player1++;
+                else gameState.scores.player2++;
             } else {
                 statusMessage.textContent = messages.win(winner);
                 subMessage.textContent = messages.winQuote;
+                if (winner === 'X') gameState.scores.player1++;
+                else gameState.scores.player2++;
             }
             if (winningCombination) highlightWinningCells(winningCombination);
         } else {
             statusMessage.textContent = messages.draw;
             subMessage.textContent = messages.drawQuote;
+            gameState.scores.ties++;
         }
 
+        saveScores();
         rematchButton.classList.remove('hidden');
     };
 
@@ -228,6 +237,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 cells[index].classList.add('winning-cell');
             }
         });
+    };
+    // --- Scoreboard Logic ---
+    const updateScoreboardDOM = () => {
+        document.getElementById('score-p1').textContent = gameState.scores.player1;
+        document.getElementById('score-p2').textContent = gameState.scores.player2;
+        document.getElementById('score-ties').textContent = gameState.scores.ties;
+    };
+
+    const saveScores = () => {
+        localStorage.setItem('cyber_ttt_scores', JSON.stringify(gameState.scores));
+        updateScoreboardDOM();
+    };
+
+    const loadPersistedScores = () => {
+        const saved = localStorage.getItem('cyber_ttt_scores');
+        if (saved) {
+            gameState.scores = JSON.parse(saved);
+
+            updateScoreboardDOM();
+        }
     };
 
     // --- Computer AI Logic ---
@@ -352,4 +381,6 @@ document.addEventListener('DOMContentLoaded', () => {
     backFromDifficultyBtn.addEventListener('click', showGameMode);
     backFromChoiceBtn.addEventListener('click', () => gameConfig.mode === 'pvc' ? showDifficultySelection() : showGameMode());
     backFromGameBtn.addEventListener('click', showGameMode);
+
+    loadPersistedScores();
 });
