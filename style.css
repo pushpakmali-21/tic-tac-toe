@@ -332,3 +332,36 @@ h2 {
         padding: 30px 20px;
     }
 }
+
+/* Scoreboard */
+.scoreboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    width: var(--board-size);
+    margin-bottom: 20px;
+}
+
+.score-card {
+    background: rgba(0, 255, 65, 0.05);
+    border: 1px solid var(--primary-color);
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.score-label {
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    color: var(--primary-color);
+    text-transform: uppercase;
+}
+
+.score-num {
+    font-size: 1.8rem;
+    color: var(--accent-color);
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+}
