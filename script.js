@@ -350,6 +350,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Navigation & Event Listeners ---
     const showGameMode = () => {
+        stopTimer();
+        gameState.isActive = false;
         gameContainer.classList.add('hidden');
         difficultySelection.classList.add('hidden');
         playerChoiceContainer.classList.add('hidden');
@@ -373,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
     rematchButton.addEventListener('click', startGame);
 
     playerVsPlayerBtn.addEventListener('click', () => { gameConfig.mode = 'pvp'; gameModeSelection.classList.add('hidden'); showPlayerChoice(); });
-    playerVsComputerBtn.addEventListener('click', () => { gameConfig.mode = 'pvc'; gameModeSelection.classList.add('hidden'); showPlayerChoice(); });
+    playerVsComputerBtn.addEventListener('click', () => { gameConfig.mode = 'pvc'; gameModeSelection.classList.add('hidden'); showDifficultySelection(); });
     difficultyEasyBtn.addEventListener('click', () => { gameConfig.difficulty = 'easy'; showPlayerChoice(); });
     difficultyHardBtn.addEventListener('click', () => { gameConfig.difficulty = 'hard'; showPlayerChoice(); });
     chooseXBtn.addEventListener('click', () => { gameConfig.playerSymbol = 'X'; gameConfig.computerSymbol = 'O'; startGame(); });
