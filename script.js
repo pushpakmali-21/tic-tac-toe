@@ -90,9 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
         gameState.board = ['', '', '', '', '', '', '', '', ''];
         gameState.isActive = true;
         gameState.currentTurn = 'X';
-        cells.forEach(cell => {
+        cells.forEach((cell, idx) => {
             cell.textContent = '';
             cell.classList.remove('winning-cell');
+            cell.setAttribute('aria-label', `Cell ${idx + 1}, Empty`);
         });
         subMessage.textContent = '';
         rematchButton.classList.add('hidden');
@@ -140,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stopTimer(); // Kill timer immediately on any move
         gameState.board[index] = gameState.currentTurn;
         cell.textContent = gameState.currentTurn;
+        cell.setAttribute('aria-label', `Cell ${index + 1}, ${gameState.currentTurn}`);
 
         const winningCombination = checkWin(gameState.board, gameState.currentTurn);
         if (winningCombination) {
