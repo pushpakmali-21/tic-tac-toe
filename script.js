@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return undefined;
     };
 
-    const minimax = (newBoard, player) => {
+    const minimax = (newBoard, player, alpha = -Infinity, beta = Infinity) => {
         // Input validation for minimax
         if (!Array.isArray(newBoard) || newBoard.length !== 9 || !['X', 'O'].includes(player)) {
             console.error('Invalid parameters for minimax algorithm');
@@ -305,15 +305,22 @@ document.addEventListener('DOMContentLoaded', () => {
             newBoard[availSpots[i]] = player;
 
             if (player === gameConfig.computerSymbol) {
-                const result = minimax(newBoard, gameConfig.playerSymbol);
+                const result = minimax(newBoard, gameConfig.playerSymbol, alpha, beta);
                 move.score = result.score;
+                alpha = Math.max(alpha, move.score);
             } else {
-                const result = minimax(newBoard, gameConfig.computerSymbol);
+                const result = minimax(newBoard, gameConfig.computerSymbol, alpha, beta);
                 move.score = result.score;
+                beta = Math.min(beta, move.score);
             }
 
             newBoard[availSpots[i]] = '';
             moves.push(move);
+
+            // Alpha-Beta Pruning check
+            if (beta <= alpha) {
+                break; // Prune remaining branches — they can't change the outcome
+            }
         }
 
         let bestMove;
