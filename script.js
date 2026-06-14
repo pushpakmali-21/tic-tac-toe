@@ -59,6 +59,44 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Feature: Timed Turns ---
+    // --- Sound Engine ---
+    const synthSound = (frequency, type = 'sine', duration = 0.1) => {
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.type = type;
+            oscillator.frequency.value = frequency;
+
+            gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + duration);
+        } catch (e) {
+            console.warn('Audio Context blocked by client policies:', e);
+        }
+    };
+
+    const playWinSound = () => {
+        synthSound(523.25, 'sine', 0.15);           // C5
+        setTimeout(() => synthSound(659.25, 'sine', 0.15), 100);  // E5
+        setTimeout(() => synthSound(783.99, 'sine', 0.3), 200);   // G5
+    };
+
+    const playLoseSound = () => {
+        synthSound(220, 'sawtooth', 0.4); // A3 low buzz
+    };
+
+    const playDrawSound = () => {
+        synthSound(440, 'sine', 0.15);                              // A4
+        setTimeout(() => synthSound(415.30, 'sine', 0.3), 150);   // Ab4 slight descent
+    };
+
     const stopTimer = () => {
         if (gameState.timerInterval) {
             clearInterval(gameState.timerInterval);
@@ -139,6 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         stopTimer(); // Kill timer immediately on any move
+        synthSound(600, 'triangle', 0.08); // Cell placement click
         gameState.board[index] = gameState.currentTurn;
         cell.textContent = gameState.currentTurn;
         cell.setAttribute('aria-label', `Cell ${index + 1}, ${gameState.currentTurn}`);
@@ -210,18 +249,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 statusMessage.textContent = (winner === gameConfig.playerSymbol) ? messages.youWin : messages.youLose;
                 subMessage.textContent = (winner === gameConfig.playerSymbol) ? messages.winQuote : messages.loseQuote;
                 if (winner === gameConfig.playerSymbol) gameState.scores.player1++;
-                else gameState.scores.player2++;
+                else { gameState.scores.player2++; playLoseSound(); }
             } else {
                 statusMessage.textContent = messages.win(winner);
                 subMessage.textContent = messages.winQuote;
                 if (winner === 'X') gameState.scores.player1++;
                 else gameState.scores.player2++;
+                playWinSound();
             }
             if (winningCombination) highlightWinningCells(winningCombination);
         } else {
             statusMessage.textContent = messages.draw;
             subMessage.textContent = messages.drawQuote;
             gameState.scores.ties++;
+            playDrawSound();
         }
 
         saveScores();
