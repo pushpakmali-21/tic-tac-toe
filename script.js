@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (gameConfig.mode === 'pvc') {
                 statusMessage.textContent = (winner === gameConfig.playerSymbol) ? messages.youWin : messages.youLose;
                 subMessage.textContent = (winner === gameConfig.playerSymbol) ? messages.winQuote : messages.loseQuote;
-                if (winner === gameConfig.playerSymbol) gameState.scores.player1++;
+                if (winner === gameConfig.playerSymbol) { gameState.scores.player1++; playWinSound(); }
                 else { gameState.scores.player2++; playLoseSound(); }
             } else {
                 statusMessage.textContent = messages.win(winner);
