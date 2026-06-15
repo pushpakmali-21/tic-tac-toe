@@ -60,11 +60,11 @@ body {
     padding: 20px;
     border-radius: 12px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border: 2px solid var(--primary-color);
     box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
     backdrop-filter: blur(10px);
-    min-height: 100px;
+    min-height: 80px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -89,19 +89,20 @@ body {
 
 .container {
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 20px;
     position: relative;
+    overflow-y: auto;
 }
 
 h1 {
-    font-size: 3.5rem;
+    font-size: clamp(1.8rem, 4vmin, 3.5rem);
     font-weight: 900;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     color: var(--primary-color);
     text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
     letter-spacing: 3px;
@@ -284,9 +285,9 @@ h2 {
 }
 
 #status-message-container {
-    min-height: 80px;
+    min-height: 60px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -364,4 +365,51 @@ h2 {
     font-size: 1.8rem;
     color: var(--accent-color);
     text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+}
+
+/* Compact layout for short viewports */
+@media (max-height: 800px) {
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+
+    #timer-wrapper {
+        min-height: 60px;
+        padding: 10px;
+    }
+
+    .timer-label {
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+
+    #timer-display {
+        font-size: 1.4rem;
+    }
+
+    #status-message {
+        font-size: 1.3rem;
+    }
+
+    #sub-message {
+        font-size: 0.9rem;
+    }
+
+    #status-message-container {
+        min-height: 50px;
+        margin-bottom: 8px;
+    }
+
+    .score-num {
+        font-size: 1.3rem;
+    }
+
+    .score-label {
+        font-size: 0.55rem;
+    }
+
+    #game-over-buttons {
+        margin: 10px 0;
+    }
 }
