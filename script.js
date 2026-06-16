@@ -301,6 +301,11 @@ document.addEventListener('DOMContentLoaded', () => {
             updateScoreboardDOM();
         }
     };
+    const resetScores = () => {
+        gameState.scores = { player1: 0, player2: 0, ties: 0 };
+        localStorage.removeItem('cyber_ttt_scores');
+        updateScoreboardDOM();
+    };
 
     // --- Computer AI Logic ---
     const handleComputerMove = () => {
@@ -402,6 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const showGameMode = () => {
         stopTimer();
         gameState.isActive = false;
+        resetScores();
         gameContainer.classList.add('hidden');
         difficultySelection.classList.add('hidden');
         playerChoiceContainer.classList.add('hidden');
@@ -421,8 +427,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cells.forEach(cell => cell.addEventListener('click', handleCellClick));
     cells.forEach((cell, idx) => cell.addEventListener('keydown', (e) => handleGridNavigation(e, idx)));
-    restartButton.addEventListener('click', startGame);
-    rematchButton.addEventListener('click', startGame);
+    restartButton.addEventListener('click', () => { resetScores(); startGame(); });
+    rematchButton.addEventListener('click', startGame); // Rematch keeps scores
 
     playerVsPlayerBtn.addEventListener('click', () => { gameConfig.mode = 'pvp'; gameModeSelection.classList.add('hidden'); showPlayerChoice(); });
     playerVsComputerBtn.addEventListener('click', () => { gameConfig.mode = 'pvc'; gameModeSelection.classList.add('hidden'); showDifficultySelection(); });
