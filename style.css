@@ -54,37 +54,11 @@ body {
     display: none !important;
 }
 
-/* Timer positioned above the grid */
-#timer-wrapper {
-    background: var(--container-bg);
-    padding: 20px;
-    border-radius: 12px;
-    text-align: center;
-    margin-bottom: 10px;
-    border: 2px solid var(--primary-color);
-    box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
-    backdrop-filter: blur(10px);
-    min-height: 80px;
+.timer-col {
     display: flex;
     flex-direction: column;
     justify-content: center;
-
-}
-
-.timer-label {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--accent-color);
-}
-
-#timer-display {
-    font-size: 2.0rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+    width: 150px;
 }
 
 .container {
@@ -190,7 +164,7 @@ h2 {
     color: var(--secondary-color);
     font-size: 1.0rem;
     padding: 8px 18px;
-    margin-top: 10px;
+    margin-top: 0;
     min-width: auto;
     border-color: var(--secondary-color);
 }
@@ -308,6 +282,9 @@ h2 {
 
 #game-over-buttons {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
     gap: 15px;
     margin: 20px 0;
 }
@@ -334,13 +311,25 @@ h2 {
     }
 }
 
-/* Scoreboard */
-.scoreboard-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    width: var(--board-size);
+/* Game Layout */
+.game-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    gap: 30px;
     margin-bottom: 20px;
+    width: 100%;
+    max-width: 900px;
+}
+
+/* Scoreboard */
+.scoreboard-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    width: 150px;
 }
 
 .score-card {

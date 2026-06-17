@@ -37,48 +37,52 @@
         </div>
 
         <div id="game-container" class="hidden">
-            <div id="scoreboard" class="scoreboard-grid">
-                <div class="score-card">
-                    <span class="score-label" id="score-label-p1">PLAYER 1</span>
-                    <span class="score-num" id="score-p1">0</span>
-                </div>
-                <div class="score-card">
-                    <span class="score-label">TIES</span>
-                    <span class="score-num" id="score-ties">0</span>
-                </div>
-                <div class="score-card">
-                    <span class="score-label" id="score-label-p2">PLAYER 2</span>
-                    <span class="score-num" id="score-p2">0</span>
-                </div>
-            </div>
-
             <div id="status-message-container" aria-live="polite">
                 <div id="status-message"></div>
                 <div id="sub-message"></div>
             </div>
 
-            <div id="timer-wrapper">
-                <div class="timer-label">TIME</div>
-                <div id="timer-display">Time left: 10</div>
-            </div>
+            <div class="game-layout">
+                <div id="scoreboard" class="scoreboard-col">
+                    <div class="score-card">
+                        <span class="score-label" id="score-label-p1">PLAYER 1</span>
+                        <span class="score-num" id="score-p1">0</span>
+                    </div>
+                    <div class="score-card">
+                        <span class="score-label">TIES</span>
+                        <span class="score-num" id="score-ties">0</span>
+                    </div>
+                    <div class="score-card">
+                        <span class="score-label" id="score-label-p2">PLAYER 2</span>
+                        <span class="score-num" id="score-p2">0</span>
+                    </div>
+                </div>
 
-            <div id="board" role="grid" aria-label="Tic-Tac-Toe Board">
-                <button class="cell" data-cell-index="0" aria-label="Cell 1, Empty"></button>
-                <button class="cell" data-cell-index="1" aria-label="Cell 2, Empty"></button>
-                <button class="cell" data-cell-index="2" aria-label="Cell 3, Empty"></button>
-                <button class="cell" data-cell-index="3" aria-label="Cell 4, Empty"></button>
-                <button class="cell" data-cell-index="4" aria-label="Cell 5, Empty"></button>
-                <button class="cell" data-cell-index="5" aria-label="Cell 6, Empty"></button>
-                <button class="cell" data-cell-index="6" aria-label="Cell 7, Empty"></button>
-                <button class="cell" data-cell-index="7" aria-label="Cell 8, Empty"></button>
-                <button class="cell" data-cell-index="8" aria-label="Cell 9, Empty"></button>
+                <div id="board" role="grid" aria-label="Tic-Tac-Toe Board">
+                    <button class="cell" data-cell-index="0" aria-label="Cell 1, Empty"></button>
+                    <button class="cell" data-cell-index="1" aria-label="Cell 2, Empty"></button>
+                    <button class="cell" data-cell-index="2" aria-label="Cell 3, Empty"></button>
+                    <button class="cell" data-cell-index="3" aria-label="Cell 4, Empty"></button>
+                    <button class="cell" data-cell-index="4" aria-label="Cell 5, Empty"></button>
+                    <button class="cell" data-cell-index="5" aria-label="Cell 6, Empty"></button>
+                    <button class="cell" data-cell-index="6" aria-label="Cell 7, Empty"></button>
+                    <button class="cell" data-cell-index="7" aria-label="Cell 8, Empty"></button>
+                    <button class="cell" data-cell-index="8" aria-label="Cell 9, Empty"></button>
+                </div>
+
+                <div class="timer-col">
+                    <div id="timer-wrapper" class="score-card">
+                        <span class="score-label">TIME</span>
+                        <span class="score-num" id="timer-display">10</span>
+                    </div>
+                </div>
             </div>
 
             <div id="game-over-buttons">
                 <button id="rematch-button" class="btn secondary-btn hidden">Rematch</button>
                 <button id="restart-button" class="btn primary-btn">Restart Game</button>
+                <button id="back-from-game" class="btn tertiary-btn">Change Options</button>
             </div>
-            <button id="back-from-game" class="btn tertiary-btn">Change Options</button>
         </div>
     </div>
     <script src="script.js"></script>

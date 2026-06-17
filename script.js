@@ -108,11 +108,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const startTimer = () => {
         stopTimer();
         let timeLeft = gameConfig.turnDuration;
-        timerDisplay.textContent = `Time left: ${timeLeft}`;
+        timerDisplay.textContent = ` ${timeLeft}`;
 
         gameState.timerInterval = setInterval(() => {
             timeLeft--;
-            timerDisplay.textContent = `Time left: ${timeLeft}`;
+            timerDisplay.textContent = ` ${timeLeft}`;
             if (timeLeft <= 0) {
                 stopTimer();
                 const loser = gameState.currentTurn;
