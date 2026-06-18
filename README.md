@@ -120,11 +120,10 @@ TIC-TAC-TAE_2/
 
 - [done] Sound effects and ambient music
 - [ done] Additional visual themes
-- [ ] Particle effects for wins
 - [ ] Custom board sizes
 - [ ] Tournament mode
 - [ ] Achievement system
-- [ ] Statistics and analytics
+- [ Done] Statistics and analytics
 
 ## 📱 Mobile Experience
 
