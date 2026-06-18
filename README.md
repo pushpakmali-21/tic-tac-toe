@@ -118,8 +118,8 @@ TIC-TAC-TAE_2/
 
 ## 🚀 Future Enhancements
 
-- [ ] Sound effects and ambient music
-- [ ] Additional visual themes
+- [done] Sound effects and ambient music
+- [ done] Additional visual themes
 - [ ] Particle effects for wins
 - [ ] Custom board sizes
 - [ ] Tournament mode
