@@ -63,6 +63,7 @@ TIC-TAC-TAE_2/
 - **Easy Mode**: Random selection from available cells
 - **Hard Mode**: Minimax algorithm with optimal move calculation
 - **Smart Opponent**: Computer plays strategically to win or force draws
+- **Alpha Beta Prunning implemented
 
 ### State Management
 - **Game Board**: 3x3 grid with turn-based gameplay
