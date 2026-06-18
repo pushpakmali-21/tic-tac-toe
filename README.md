@@ -1,8 +1,8 @@
-# 🎮 Tic-Tac-Toe - Retro Futuristic Edition
+#  Tic-Tac-Toe - Retro Futuristic Edition
 
-A sleek, futuristic Tic-Tac-Toe game built with vanilla HTML, CSS, and JavaScript. This project features a stunning Retro Futuristic aesthetic with neon colors, glowing effects, and smooth gameplay mechanics.
+A sleek, futuristic Tic-Tac-Toe game built with vanilla HTML, CSS, and JavaScript. This project features a stunning Retro Futuristic aesthetic with neon colors, glowing effects, and smooth gameplay mechanics for ease of play
 
-## ✨ Features
+## Features
 
 ### 🎯 Game Modes
 - **Player vs Player**: Classic head-to-head gameplay
